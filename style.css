@@ -1,0 +1,11 @@
+body{
+    background:linear-gradient(15deg, #F4F6FC, #E1E8F0);
+    text-align: center;
+    background-repeat: no-repeat;
+    min-height: 812px;
+    width: 375px;
+    margin: 0 auto 0 auto;
+}
+.chart_style{
+  margin-top: 20px;
+}
