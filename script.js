@@ -74,7 +74,7 @@ var createGrooveShadow = function () {
 
 var createDropShadow = function () {
   var defs = d3.select("svg").append("defs");
-{/* <filter id="dropshadow">
+  {/* <filter id="dropshadow">
   <feGaussianBlur in="SourceAlpha" stdDeviation="3"/> 
   <feOffset dx="2" dy="2"/>
   <feComponentTransfer>
@@ -91,12 +91,12 @@ var createDropShadow = function () {
   filter.append("feGaussianBlur")
     .attr("in", "SourceAlpha")
     .attr("stdDeviation", 1)
-    // .attr("result", "blur");
+  // .attr("result", "blur");
   filter.append("feOffset")
     // .attr("in", "blur")
     .attr("dx", 2)
     .attr("dy", 2)
-    // .attr("result", "offsetBlur");
+  // .attr("result", "offsetBlur");
   filter.append("feComponentTransfer")
     .append("feFuncA")
     .attr("type", "linear")
@@ -131,18 +131,42 @@ var createGroove = function () {
     .attr("d", arcBackground)
     .style("fill", "url(#Gradient)")
     .style("filter", "url(#insetShadow)");
-
 };
 
-// 外縁を作成
-// var outerEdge =
 
-// 中央部分を作成
+// 外縁と中央部分を作成
 var createClock = function () {
   var circle = svg.append("circle")
-    .attr("r", "153.5")
-    .style("fill", "url(#Gradient)")
-}
+    .attr("r", "63.5")
+    .style("fill", "url(#Gradient)");
+
+    var centerCircle = svg.append("circle")
+    .attr("r", "6.5")
+    .style("fill", "#1f242a");
+
+
+    var nowTime = new Date();
+
+    var pointer = svg.append("rect")
+    .attr("width", 5)
+    .attr("height", 45)
+    .attr("rx", 2.5)
+    .attr("ry", 2.5)
+    .style("fill", "#1f242a")
+    .attr("x", -2.5)
+    .attr("y", -45)
+    .attr("transform", "rotate(" + nowTime.getHours() * 15 + ")");
+
+  var outerEdgeBackground = d3.svg.arc()
+    .innerRadius(153.5)
+    .outerRadius(123.5)
+    .startAngle(0)
+    .endAngle(2 * Math.PI);
+
+  var pathBackground = svg.append('path')
+    .attr("d", outerEdgeBackground)
+    .style("fill", "url(#Gradient)");
+};
 
 // 時間に応じてタスクを生成
 var createTask = function (startTime, endTime, code) {
@@ -162,11 +186,12 @@ var createTask = function (startTime, endTime, code) {
 
 // data
 var Tasks = [
-  { name: 'running', startTime: "2:00", endTime: "3:00" },
-  { name: 'homework', startTime: "5:35", endTime: "8:00" },
-  { name: '買い物', startTime: "23:00", endTime: "24:00" },
-  { name: 'lunch', startTime: "12:30", endTime: "13:00" },
+  { name: 'running', startTime: "14:00", endTime: "16:00" },
+  { name: 'homework', startTime: "6:35", endTime: "9:00" },
+  { name: '買い物', startTime: "22:00", endTime: "23:30" },
+  { name: 'lunch', startTime: "12:00", endTime: "13:00" },
   { name: 'dinner', startTime: "19:00", endTime: "20:00" },
+  { name: 'sleep', startTime: "00:00", endTime: "5:00" },
 ];
 
 var Gradients = [
@@ -186,7 +211,6 @@ var Gradients = [
 createGradient(svg, '#f5f4f4', '#f0efef', 'Gradient');
 createGrooveShadow();
 createDropShadow();
-createClock();
 createGroove();
 
 // タスクのグラデーションとsvg作成
@@ -204,4 +228,6 @@ for (var i = 0; i < Tasks.length; ++i) {
 
   createTask(startTime, endTime, code);
 };
+
+createClock();
 
