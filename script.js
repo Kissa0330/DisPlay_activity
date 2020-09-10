@@ -186,6 +186,7 @@ var Gradients = [
 createGradient(svg, '#f5f4f4', '#f0efef', 'Gradient');
 createGrooveShadow();
 createDropShadow();
+createClock();
 createGroove();
 
 // タスクのグラデーションとsvg作成
@@ -204,4 +205,3 @@ for (var i = 0; i < Tasks.length; ++i) {
   createTask(startTime, endTime, code);
 };
 
-createClock();
