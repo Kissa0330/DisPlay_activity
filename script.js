@@ -1,7 +1,8 @@
 var w = 307, h = 307;
-var outerRadius = w / 2;
+var outerRadius = (w / 2) - 30;
 var innerRadius = outerRadius - 60;
 
+// グラデーション作り
 var createGradient = function (svg, color, color1, id) {
 
   var defs = svg.append("defs");
@@ -25,30 +26,88 @@ var createGradient = function (svg, color, color1, id) {
     .attr("stop-opacity", 1);
 };
 
+// 溝の影を作る
 var createGrooveShadow = function () {
-  var defs = svg.append("defs");
+  var defs = d3.select("svg").append("defs");
 
   var filter = defs.append("filter")
-    .attr("id", grooveShadow);
+    .attr("id", "insetShadow")
+    .attr("x", "-50%")
+    .attr("y", "-50%")
+    .attr("width", "200%")
+    .attr("height", "200%");
+
+  filter.append("feComponentTransfer")
+    .attr("in", "SourceAlpha")
+    .append("feFuncA")
+    .attr("type", "table")
+    .attr("tableValues", "1 0");
+
+  filter.append("feGaussianBlur")
+    .attr("stdDeviation", 3);
+
+  filter.append("feOffset")
+    .attr("dx", "1")
+    .attr("dy", "5")
+    .attr("result", "offsetblur");
+
+  filter.append("feFlood")
+    .attr("flood-color", "rgba(40, 40, 60);")
+    .attr("flood-opacity", "0.6")
+    .attr("result", "color")
+
+  filter.append("feComposite")
+    .attr("in2", "offsetblur")
+    .attr("operator", "in")
+
+  filter.append("feComposite")
+    .attr("in2", "SourceAlpha")
+    .attr("operator", "in")
+
+  filter.append("feMerge")
+    .append("feMergeNode")
+    .attr("in", "SourceGraphic");
+
+  filter.select("feMerge")
+    .append("feMergeNode")
+};
+
+var createDropShadow = function () {
+  var defs = d3.select("svg").append("defs");
+{/* <filter id="dropshadow">
+  <feGaussianBlur in="SourceAlpha" stdDeviation="3"/> 
+  <feOffset dx="2" dy="2"/>
+  <feComponentTransfer>
+    <feFuncA type="linear" slope="0.2"/>
+  </feComponentTransfer>
+  <feMerge> 
+    <feMergeNode/>
+    <feMergeNode in="SourceGraphic"/> 
+  </feMerge>
+</filter> */}
+  var filter = defs.append("filter")
+    .attr("id", "dropShadow");
 
   filter.append("feGaussianBlur")
     .attr("in", "SourceAlpha")
-    .attr("stdDeviation", stdDeviation)
-    .attr("result", "blur");
+    .attr("stdDeviation", 1)
+    // .attr("result", "blur");
   filter.append("feOffset")
-    .attr("in", "blur")
-    .attr("dx", dx)
-    .attr("dy", dy)
-    .attr("result", "offsetBlur");
+    // .attr("in", "blur")
+    .attr("dx", 2)
+    .attr("dy", 2)
+    // .attr("result", "offsetBlur");
+  filter.append("feComponentTransfer")
+    .append("feFuncA")
+    .attr("type", "linear")
+    .attr("slope", "0.15")
 
   var feMerge = filter.append("feMerge");
 
   feMerge.append("feMergeNode")
-    .attr("in", "offsetBlur");
   feMerge.append("feMergeNode")
     .attr("in", "SourceGraphic");
 };
-
 // キャンバスを作成
 var svg = d3.select("#chart")
   .append("svg")
@@ -70,8 +129,20 @@ var createGroove = function () {
 
   var pathBackground = svg.append('path')
     .attr("d", arcBackground)
-    .style("fill", "url(#grooveGradient)");
+    .style("fill", "url(#Gradient)")
+    .style("filter", "url(#insetShadow)");
+
 };
+
+// 外縁を作成
+// var outerEdge =
+
+// 中央部分を作成
+var createClock = function () {
+  var circle = svg.append("circle")
+    .attr("r", "153.5")
+    .style("fill", "url(#Gradient)")
+}
 
 // 時間に応じてタスクを生成
 var createTask = function (startTime, endTime, code) {
@@ -79,20 +150,23 @@ var createTask = function (startTime, endTime, code) {
     .innerRadius(innerRadius)
     .outerRadius(outerRadius)
     .startAngle(2 * Math.PI / 24 * startTime)
-    .endAngle(2 * Math.PI / 24 * endTime)
+    .endAngle(2 * Math.PI / 24 * endTime);
 
   var pathForeground = svg.append('path')
     .attr({
       d: arcForeground
     })
-    .style("fill", "url(#taskGradient" + code + ")");
+    .style("fill", "url(#taskGradient" + code + ")")
+    .style("filter", "url(#dropShadow)");;
 };
 
 // data
 var Tasks = [
   { name: 'running', startTime: "2:00", endTime: "3:00" },
   { name: 'homework', startTime: "5:35", endTime: "8:00" },
-  { name: '買い物', startTime: "23:00", endTime: "24:00" }
+  { name: '買い物', startTime: "23:00", endTime: "24:00" },
+  { name: 'lunch', startTime: "12:30", endTime: "13:00" },
+  { name: 'dinner', startTime: "19:00", endTime: "20:00" },
 ];
 
 var Gradients = [
@@ -108,24 +182,26 @@ var Gradients = [
   { name: "lightRed", color: "#EF8B8B", color1: "#EB5869" }
 ];
 
-createGradient(svg, '#f5f4f4', '#f0efef', 'grooveGradient');
+// 実行部分
+createGradient(svg, '#f5f4f4', '#f0efef', 'Gradient');
+createGrooveShadow();
+createDropShadow();
 createGroove();
 
-
+// タスクのグラデーションとsvg作成
 for (var i = 0; i < Tasks.length; ++i) {
   var number = Tasks[i].name.charCodeAt(0);
   var code = number.toString().split('').pop();
-  
+
   var start = Tasks[i].startTime.split(":");
   var startTime = (start[0] + start[1] * 0.0166) * 0.1;
 
   var end = Tasks[i].endTime.split(":");
   var endTime = (end[0] + end[1] * 0.0166) * 0.1;
-  
+
   createGradient(svg, Gradients[code].color, Gradients[code].color1, "taskGradient" + code + "");
 
   createTask(startTime, endTime, code);
-
-  console.log(code)
-  console.log("taskGradient" + Tasks[i].code + "");
 };
+
+createClock();
