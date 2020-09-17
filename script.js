@@ -74,17 +74,7 @@ var createGrooveShadow = function () {
 
 var createDropShadow = function () {
   var defs = d3.select("svg").append("defs");
-  {/* <filter id="dropshadow">
-  <feGaussianBlur in="SourceAlpha" stdDeviation="3"/> 
-  <feOffset dx="2" dy="2"/>
-  <feComponentTransfer>
-    <feFuncA type="linear" slope="0.2"/>
-  </feComponentTransfer>
-  <feMerge> 
-    <feMergeNode/>
-    <feMergeNode in="SourceGraphic"/> 
-  </feMerge>
-</filter> */}
+
   var filter = defs.append("filter")
     .attr("id", "dropShadow");
 
@@ -141,20 +131,23 @@ var createClock = function () {
     .style("fill", "url(#Gradient)");
 
     var centerCircle = svg.append("circle")
-    .attr("r", "6.5")
+    .attr("r", "7.5")
     .style("fill", "#1f242a");
 
 
     var nowTime = new Date();
 
     var pointer = svg.append("rect")
-    .attr("width", 5)
+    .attr("width", 6)
     .attr("height", 45)
     .attr("rx", 2.5)
     .attr("ry", 2.5)
     .style("fill", "#1f242a")
-    .attr("x", -2.5)
+    .attr("x", -3)
     .attr("y", -45)
+    // .transition()
+    // .duration(1500)
+    // .delay(1000)
     .attr("transform", "rotate(" + nowTime.getHours() * 15 + ")");
 
   var outerEdgeBackground = d3.svg.arc()
@@ -163,7 +156,7 @@ var createClock = function () {
     .startAngle(0)
     .endAngle(2 * Math.PI);
 
-  var pathBackground = svg.append('path')
+  var outerEdgepath = svg.append('path')
     .attr("d", outerEdgeBackground)
     .style("fill", "url(#Gradient)");
 };
@@ -177,21 +170,24 @@ var createTask = function (startTime, endTime, code) {
     .endAngle(2 * Math.PI / 24 * endTime);
 
   var pathForeground = svg.append('path')
+    .style("fill", "url(#taskGradient" + code + ")")
+    .style("filter", "url(#dropShadow)")
+    // .transition()
+    // .duration(1500)
+    // .delay(800)
     .attr({
       d: arcForeground
-    })
-    .style("fill", "url(#taskGradient" + code + ")")
-    .style("filter", "url(#dropShadow)");;
+    });
 };
 
 // data
 var Tasks = [
   { name: 'running', startTime: "14:00", endTime: "16:00" },
   { name: 'homework', startTime: "6:35", endTime: "9:00" },
-  { name: '買い物', startTime: "22:00", endTime: "23:30" },
+  { name: '買い物', startTime: "21:00", endTime: "22:30" },
   { name: 'lunch', startTime: "12:00", endTime: "13:00" },
   { name: 'dinner', startTime: "19:00", endTime: "20:00" },
-  { name: 'sleep', startTime: "00:00", endTime: "5:00" },
+  { name: 'sleep', startTime: "23:00", endTime: "5:00" },
 ];
 
 var Gradients = [
@@ -219,11 +215,27 @@ for (var i = 0; i < Tasks.length; ++i) {
   var code = number.toString().split('').pop();
 
   var start = Tasks[i].startTime.split(":");
-  var startTime = (start[0] + start[1] * 0.0166) * 0.1;
 
   var end = Tasks[i].endTime.split(":");
+
+  var startTime = (start[0] + start[1] * 0.0166) * 0.1;
+
   var endTime = (end[0] + end[1] * 0.0166) * 0.1;
 
+  // console.log(startTime);
+  // console.log(endTime);
+  // console.log(startTime > endTime);
+  // console.log(endTime > startTime);
+  
+  if(startTime > endTime)
+  {
+    console.log("abnormal");
+    startTime = 0;
+  }
+  else
+  {
+    console.log("normal");
+  };
   createGradient(svg, Gradients[code].color, Gradients[code].color1, "taskGradient" + code + "");
 
   createTask(startTime, endTime, code);
