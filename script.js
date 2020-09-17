@@ -146,9 +146,16 @@ var createClock = function () {
     .attr("x", -3)
     .attr("y", -45)
     // .transition()
-    // .duration(1500)
-    // .delay(1000)
-    .attr("transform", "rotate(" + nowTime.getHours() * 15 + ")");
+    // .duration(500)
+    // .attr("transform", "rotate(" + nowTime.getHours() / 4 * 15 + " )")
+    // .transition()
+    // .delay(300)
+    // .duration(500)
+    // .attr("transform", "rotate(" + nowTime.getHours() / 2 * 15.5 + " )")
+    // .transition()
+    // .duration(1200)
+    // .ease("bounce")
+    .attr("transform", "rotate(" + nowTime.getHours()  * 15 + " )");
 
   var outerEdgeBackground = d3.svg.arc()
     .innerRadius(153.5)
@@ -181,10 +188,10 @@ var createTask = function (startTime, endTime, code) {
 };
 
 // data
-var Tasks = [
+var customs = [
   { name: 'running', startTime: "14:00", endTime: "16:00" },
-  { name: 'homework', startTime: "6:35", endTime: "9:00" },
-  { name: '買い物', startTime: "21:00", endTime: "22:30" },
+  { name: 'homework', startTime: "6:45", endTime: "9:00" },
+  { name: '買い物', startTime: "21:00", endTime: "21:30" },
   { name: 'lunch', startTime: "12:00", endTime: "13:00" },
   { name: 'dinner', startTime: "19:00", endTime: "20:00" },
   { name: 'sleep', startTime: "23:00", endTime: "5:00" },
@@ -210,31 +217,27 @@ createDropShadow();
 createGroove();
 
 // タスクのグラデーションとsvg作成
-for (var i = 0; i < Tasks.length; ++i) {
-  var number = Tasks[i].name.charCodeAt(0);
+for (var i = 0; i < customs.length; ++i) {
+  var number = customs[i].name.charCodeAt(0);
   var code = number.toString().split('').pop();
 
-  var start = Tasks[i].startTime.split(":");
+  var start = customs[i].startTime.split(":");
 
-  var end = Tasks[i].endTime.split(":");
+  var end = customs[i].endTime.split(":");
 
-  var startTime = (start[0] + start[1] * 0.0166) * 0.1;
+  var startTime = (start[0] + start[1] * 0.166) * 0.1;
 
-  var endTime = (end[0] + end[1] * 0.0166) * 0.1;
+  var endTime = (end[0] + end[1] * 0.166) * 0.1;
 
-  // console.log(startTime);
-  // console.log(endTime);
-  // console.log(startTime > endTime);
-  // console.log(endTime > startTime);
-  
   if(startTime > endTime)
   {
-    console.log("abnormal");
+    // console.log("abnormal");
     startTime = 0;
   }
   else
   {
-    console.log("normal");
+    // console.log("normal");
+    ;
   };
   createGradient(svg, Gradients[code].color, Gradients[code].color1, "taskGradient" + code + "");
 
