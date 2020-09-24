@@ -2,7 +2,7 @@ var w = 307, h = 307;
 var outerRadius = (w / 2) - 30;
 var innerRadius = outerRadius - 60;
 
-// グラデーション作り
+// グラデーション作成
 var createGradient = function (svg, color, color1, id) {
 
   var defs = svg.append("defs");
@@ -26,7 +26,7 @@ var createGradient = function (svg, color, color1, id) {
     .attr("stop-opacity", 1);
 };
 
-// 溝の影を作る
+// 溝の影を作成
 var createGrooveShadow = function () {
   var defs = d3.select("svg").append("defs");
 
@@ -145,54 +145,22 @@ var createClock = function () {
     .style("fill", "#1f242a")
     .attr("x", -3)
     .attr("y", -45)
-    .transition()
-    .duration(50)
-    .ease("linear")
-    .attr("transform", "rotate(90)")
-    .transition()
-    .duration(50)
-    .ease("linear")
-    .attr("transform", "rotate(180)")
-    .transition()
-    .duration(50)
-    .ease("linear")
-    .attr("transform", "rotate(270)")
-    .transition()
-    .duration(50)
-    .ease("linear")
-    .attr("transform", "rotate(360)")
-    .transition()
-    .duration(75)
-    .ease("linear")
-    .attr("transform", "rotate(90)")
-    .transition()
-    .duration(75)
-    .ease("linear")
-    .attr("transform", "rotate(180)")
-    .transition()
-    .duration(75)
-    .ease("linear")
-    .attr("transform", "rotate(270)")
-    .transition()
-    .duration(75)
-    .ease("linear")
-    .attr("transform", "rotate(360)")
-    .transition()
-    .duration(75)
-    .ease("linear")
-    .attr("transform", "rotate(90)")
-    .transition()
-    .duration(125)
-    .ease("linear")
-    .attr("transform", "rotate(180)")
-    .transition()
-    .duration(150)
-    .ease("linear")
-    .attr("transform", "rotate(270)")
-    .transition()
-    .duration(200)
-    .ease("linear")
-    .attr("transform", "rotate(360)")
+    // .transition()
+    // .duration(100)
+    // .ease("linear")
+    // .attr("transform", "rotate(90)")
+    // .transition()
+    // .duration(125)
+    // .ease("linear")
+    // .attr("transform", "rotate(180)")
+    // .transition()
+    // .duration(150)
+    // .ease("linear")
+    // .attr("transform", "rotate(270)")
+    // .transition()
+    // .duration(200)
+    // .ease("linear")
+    // .attr("transform", "rotate(360)")
     .transition()
     .duration(300)
     .ease("linear")
