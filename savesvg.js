@@ -14,10 +14,10 @@ var ctx = canvas.getContext("2d");
 
 // 新しいイメージ要素の作成
 var image = new Image;
-console.log(svgData);
+// console.log(svgData);
 // imageが読み込まれた段階でイベント発火
 document.getElementById('js-button').onclick = function(){
-  console.log("test");
+  // console.log("test");
     ctx.drawImage( image, 0, 0 ); //空要素の作成
     var a = document.createElement("a"); //aタグを作成
     a.href = canvas.toDataURL("image/png"); //aタグのリンクに関数を設定

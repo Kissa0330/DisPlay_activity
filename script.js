@@ -101,17 +101,15 @@ var createDropShadow = function () {
 // キャンバスを作成
 var svg = d3.select("#chart")
   .append("svg")
-  .attr({
-    width: w,
-    height: h
-  }).append('g')
-  .attr({
-    transform: 'translate(' + w / 2 + ',' + h / 2 + ')'
-  });
+  .attr("width", w)
+  .attr("height", h)
+  .append('g')
+  .attr(
+    "transform", 'translate(' + w / 2 + ',' + h / 2 + ')');
 
 // 溝を作成
 var createGroove = function () {
-  var arcBackground = d3.svg.arc()
+  var arcBackground = d3.arc()
     .innerRadius(innerRadius)
     .outerRadius(outerRadius)
     .startAngle(0)
@@ -130,14 +128,14 @@ var createClock = function () {
     .attr("r", "63.5")
     .style("fill", "url(#Gradient)");
 
-    var centerCircle = svg.append("circle")
+  var centerCircle = svg.append("circle")
     .attr("r", "7.5")
     .style("fill", "#1f242a");
 
 
-    var nowTime = new Date();
+  var nowTime = new Date();
 
-    var pointer = svg.append("rect")
+  var pointer = svg.append("rect")
     .attr("width", 6)
     .attr("height", 45)
     .attr("rx", 2.5)
@@ -172,9 +170,9 @@ var createClock = function () {
     // .transition()
     // .duration(600)
     // .ease("bounce")
-    .attr("transform", "rotate(" + nowTime.getHours()  * 15 + " )");
+    .attr("transform", "rotate(" + nowTime.getHours() * 15 + " )");
 
-  var outerEdgeBackground = d3.svg.arc()
+  var outerEdgeBackground = d3.arc()
     .innerRadius(153.5)
     .outerRadius(123.5)
     .startAngle(0)
@@ -187,7 +185,7 @@ var createClock = function () {
 
 // 時間に応じてタスクを生成
 var createTask = function (startTime, endTime, code) {
-  var arcForeground = d3.svg.arc()
+  var arcForeground = d3.arc()
     .innerRadius(innerRadius)
     .outerRadius(outerRadius)
     .startAngle(2 * Math.PI / 24 * startTime)
@@ -199,9 +197,7 @@ var createTask = function (startTime, endTime, code) {
     // .transition()
     // .duration(1500)
     // .delay(800)
-    .attr({
-      d: arcForeground
-    });
+    .attr("d", arcForeground);
 };
 
 // data
@@ -246,13 +242,11 @@ for (var i = 0; i < customs.length; ++i) {
 
   var endTime = (end[0] + end[1] * 0.166) * 0.1;
 
-  if(startTime > endTime)
-  {
+  if (startTime > endTime) {
     // console.log("abnormal");
     startTime = 0;
   }
-  else
-  {
+  else {
     // console.log("normal");
     ;
   };
@@ -262,4 +256,3 @@ for (var i = 0; i < customs.length; ++i) {
 };
 
 createClock();
-
